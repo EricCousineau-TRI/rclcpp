@@ -40,6 +40,14 @@ init_time_point(rcl_clock_type_t & clock_type)
   return time_point;
 }
 
+inline void
+throw_if_different(const rcl_clock_type_t & a, const rcl_clock_type_t & b)
+{
+  if (a != b) {
+    throw std::runtime_error("can't asdf compare times with different time sources");
+  }
+}
+
 }  // namespace
 
 namespace rclcpp
@@ -125,9 +133,7 @@ Time::operator=(const builtin_interfaces::msg::Time & time_msg)
 bool
 Time::operator==(const rclcpp::Time & rhs) const
 {
-  if (rcl_time_.clock_type != rhs.rcl_time_.clock_type) {
-    throw std::runtime_error("can't compare times with different time sources");
-  }
+  throw_if_different(rcl_time_.clock_type, rhs.rcl_time_.clock_type);
 
   return rcl_time_.nanoseconds == rhs.rcl_time_.nanoseconds;
 }
@@ -141,9 +147,7 @@ Time::operator!=(const rclcpp::Time & rhs) const
 bool
 Time::operator<(const rclcpp::Time & rhs) const
 {
-  if (rcl_time_.clock_type != rhs.rcl_time_.clock_type) {
-    throw std::runtime_error("can't compare times with different time sources");
-  }
+  throw_if_different(rcl_time_.clock_type, rhs.rcl_time_.clock_type);
 
   return rcl_time_.nanoseconds < rhs.rcl_time_.nanoseconds;
 }
@@ -151,9 +155,7 @@ Time::operator<(const rclcpp::Time & rhs) const
 bool
 Time::operator<=(const rclcpp::Time & rhs) const
 {
-  if (rcl_time_.clock_type != rhs.rcl_time_.clock_type) {
-    throw std::runtime_error("can't compare times with different time sources");
-  }
+  throw_if_different(rcl_time_.clock_type, rhs.rcl_time_.clock_type);
 
   return rcl_time_.nanoseconds <= rhs.rcl_time_.nanoseconds;
 }
@@ -161,9 +163,7 @@ Time::operator<=(const rclcpp::Time & rhs) const
 bool
 Time::operator>=(const rclcpp::Time & rhs) const
 {
-  if (rcl_time_.clock_type != rhs.rcl_time_.clock_type) {
-    throw std::runtime_error("can't compare times with different time sources");
-  }
+  throw_if_different(rcl_time_.clock_type, rhs.rcl_time_.clock_type);
 
   return rcl_time_.nanoseconds >= rhs.rcl_time_.nanoseconds;
 }
@@ -171,9 +171,7 @@ Time::operator>=(const rclcpp::Time & rhs) const
 bool
 Time::operator>(const rclcpp::Time & rhs) const
 {
-  if (rcl_time_.clock_type != rhs.rcl_time_.clock_type) {
-    throw std::runtime_error("can't compare times with different time sources");
-  }
+  throw_if_different(rcl_time_.clock_type, rhs.rcl_time_.clock_type);
 
   return rcl_time_.nanoseconds > rhs.rcl_time_.nanoseconds;
 }
